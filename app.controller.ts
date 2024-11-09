@@ -10,16 +10,23 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get("assignment-1-fibonacci-sequence/:terms")
-  getFibonacciSequence(@Param("terms") terms: string): { sequence: number[] } {
-    const numTerms = parseInt(terms, 10);  // Convert the string to a number
-    const sequence = [0, 1];
-  
-    for (let num = 2; num < numTerms; num++) {
-      sequence.push(sequence[num - 1] + sequence[num - 2]);
+  @Get(':n')
+    calculateFactorial(@Param('n') n: string): { result: number } {
+        const numberN = parseInt(n, 10);
+        if (isNaN(numberN) || numberN < 0) {
+            throw new BadRequestException('Please provide a valid non-negative integer for n.');
+        }
+        const result = this.factorial(numberN);
+        return { result };
     }
-  
-    return { sequence };
-  }
+
+    private factorial(n: number): number {
+        if (n === 0) return 1; // 0! is 1
+        let result = 1;
+        for (let i = 1; i <= n; i++) {
+            result *= i;
+        }
+        return result;
+    }
 
 }
