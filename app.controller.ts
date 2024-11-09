@@ -1,24 +1,24 @@
 import { BadRequestException, Controller, Get, Param, } from '@nestjs/common';
 
-@Controller('prime-number')
+@Controller('prime')
 export class PrimeNumberController {
 
   @Get(':n')
-  calculateFactorial(@Param('n') n: string): { result: number } {
-      const numberN = parseInt(n, 10);
-      if (isNaN(numberN) || numberN < 0) {
-          throw new BadRequestException('Please provide a valid non-negative integer for n.');
-      }
-      const result = this.factorial(numberN);
-      return { result };
-  }
+    checkPrime(@Param('n') n: string): { isPrime: boolean } {
+        const numberN = parseInt(n, 10);
+        if (isNaN(numberN) || numberN < 1) {
+            throw new BadRequestException('Please provide a valid positive integer for n.');
+        }
+        const isPrime = this.isPrime(numberN);
+        return { isPrime };
+    }
 
-  private factorial(n: number): number {
-      if (n === 0) return 1; // 0! is 1
-      let result = 1;
-      for (let i = 1; i <= n; i++) {
-          result *= i;
-      }
-      return result;
-  }
+    private isPrime(num: number): boolean {
+        if (num < 2) return false; // 0 and 1 are not prime numbers
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i === 0) {
+                return false;
+            }
+        }
+        return true; // num is prime
 }
